@@ -58,7 +58,7 @@ class Positive(nn.Module):
         'exp': Mapping(lambda x: x.exp(), lambda x: x.abs().log()),
         'square': Mapping(lambda x: x.square(), lambda x: x.abs().sqrt()),
         'softplus': Mapping(lambda x: F.softplus(x), lambda x: x.expm1().log()),
-        'celu': Mapping(lambda x: 1+torch.celu(x), lambda x: torch.where(x>1, x-1, x.log()))
+        'celu': Mapping(lambda x: 1+torch.celu(x), lambda x: torch.where(x>1, x-1, x.log())),
         'cholesky': Mapping(lambda x: torch.cholesky(x), lambda x: x @ x.t())
     }
 
@@ -82,7 +82,7 @@ class ConstrainedLinear(nn.Linear):
         bias: bool = True,
         device=None, 
         dtype=None,
-        weight_parametrization:'abs',
+        weight_parametrization:str='abs',
     ):
         super().__init__(in_features, out_features, bias=bias, device=device, dtype=dtype)
         assert weight_parametrization in Positive.mappings.keys()
